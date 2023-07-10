@@ -231,4 +231,27 @@ C.FramesetOK =
     C.frameset |
     C.noframes;
 
-export { classIds, ClassVecs, C };
+const states = {
+    main: 1 << 0,
+    inTable: 1 << 1,
+    inSvg: 1 << 2,
+    inMath: 1 << 3,
+    inSelect: 1 << 4,
+    inPhrasing: 1 << 5,
+};
+
+const None = 0n;
+
+function printKind(info) {
+    if (info === ~0n) return 'Any';
+    if (info === 0n) return 'None';
+    const _info = info < 0n ? ~info : info;
+    const r = [];
+    for (let k in ClassVecs) if (ClassVecs[k] & _info) r.push(k);
+
+    return (
+        (info < 0n ? '~' : '') + (r.length === 1 ? r[0] : `(${r.join('|')})`)
+    );
+}
+
+export { classIds, ClassVecs, C, states, None };
